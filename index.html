@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Routing Protocols</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #8e24aa;
+            border-bottom: 3px solid #ff69b4;
+            padding-bottom: 10px;
+        }
+        
+        .protocol-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .protocol-level {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        .protocol-box {
+            border: 2px solid #8e24aa;
+            border-radius: 8px;
+            padding: 10px 20px;
+            margin: 0 15px;
+            cursor: pointer;
+            background-color: #fff;
+            transition: all 0.3s ease;
+            min-width: 160px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .protocol-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background-color: #f3e5f5;
+        }
+        
+        .protocol-box.active {
+            background-color: #8e24aa;
+            color: white;
+        }
+        
+        .connector {
+            width: 2px;
+            height: 20px;
+            background-color: #ff69b4;
+            margin: 0 auto;
+        }
+        
+        .horizontal-connector {
+            height: 2px;
+            background-color: #ff69b4;
+            margin: 10px 0;
+        }
+        
+        .level-connector {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .info-panel {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.5s ease;
+            opacity: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .info-panel.active {
+            max-height: 500px;
+            opacity: 1;
+            padding: 20px;
+        }
+        
+        .info-panel h2 {
+            color: #8e24aa;
+            margin-top: 0;
+        }
+        
+        .info-panel ul {
+            padding-left: 20px;
+        }
+        
+        .info-panel li {
+            margin-bottom: 8px;
+        }
+        
+        .comparison-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #8e24aa;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .comparison-btn:hover {
+            background-color: #6a1b9a;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .comparison-table th {
+            background-color: #f3e5f5;
+            color: #8e24aa;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dynamic Routing Protocols</h1>
+        
+        <div class="protocol-chart">
+            <!-- Level 1 -->
+            <div class="protocol-level">
+                <div class="protocol-box" id="routing-protocol">Routing Protocol</div>
+            </div>
+            
+            <div class="connector"></div>
+            <div class="horizontal-connector" style="width: 70%;"></div>
+            
+            <!-- Level 2 -->
+            <div class="protocol-level">
+                <div class="protocol-box" id="igp" style="margin-right: 100px;">IGP (Interior Gateway Protocol)</div>
+                <div class="protocol-box" id="egp">EGP (Exterior Gateway Protocol)</div>
+            </div>
+            
+            <!-- Level 3 Connectors -->
+            <div class="level-connector">
+                <div style="display: flex; flex-direction: column; align-items: center; margin-right: 100px; width: 50%;">
+                    <div class="connector"></div>
+                    <div class="horizontal-connector" style="width: 80%;"></div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; width: 50%;">
+                    <div class="connector"></div>
+                </div>
+            </div>
+            
+            <!-- Level 3 -->
+            <div class="protocol-level">
+                <div class="protocol-box" id="distance-vector">Distance Vector</div>
+                <div class="protocol-box" id="enhanced-dv">Enhanced DV / Hybrid</div>
+                <div class="protocol-box" id="link-state">Link State</div>
+                <div class="protocol-box" id="path-vector">Path Vector Protocol</div>
+            </div>
+            
+            <!-- Level 4 Connectors -->
+            <div class="level-connector">
+                <div style="display: flex; flex-direction: column; align-items: center; width: 25%;">
+                    <div class="connector"></div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; width: 25%;">
+                    <div class="connector"></div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; width: 25%;">
+                    <div class="connector"></div>
+                    <div class="horizontal-connector" style="width: 60%;"></div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; width: 25%;">
+                    <div class="connector"></div>
+                </div>
+            </div>
+            
+            <!-- Level 4 -->
+            <div class="protocol-level">
+                <div class="protocol-box" id="rip">RIP</div>
+                <div class="protocol-box" id="eigrp">EIGRP</div>
+                <div class="protocol-box" id="ospf">OSPF</div>
+                <div class="protocol-box" id="is-is">IS-IS</div>
+                <div class="protocol-box" id="bgp">BGP</div>
+            </div>
+        </div>
+        
+        <div class="info-panel" id="info-panel">
+            <h2 id="info-title">Select a protocol to learn more</h2>
+            <div id="info-content">Click on any of the boxes above to see detailed information about that routing protocol.</div>
+        </div>
+        
+        <button class="comparison-btn" id="comparison-btn">Compare All Protocols</button>
+        
+        <table class="comparison-table" id="comparison-table">
+            <thead>
+                <tr>
+                    <th>Protocol</th>
+                    <th>Type</th>
+                    <th>Algorithm</th>
+                    <th>Convergence</th>
+                    <th>Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>RIP</td>
+                    <td>IGP</td>
+                    <td>Distance Vector</td>
+                    <td>Slow</td>
+                    <td>Small networks</td>
+                </tr>
+                <tr>
+                    <td>EIGRP</td>
+                    <td>IGP</td>
+                    <td>Enhanced Distance Vector/Hybrid</td>
+                    <td>Fast</td>
+                    <td>Medium-sized Cisco networks</td>
+                </tr>
+                <tr>
+                    <td>OSPF</td>
+                    <td>IGP</td>
+                    <td>Link State</td>
+                    <td>Fast</td>
+                    <td>Medium to large networks</td>
+                </tr>
+                <tr>
+                    <td>IS-IS</td>
+                    <td>IGP</td>
+                    <td>Link State</td>
+                    <td>Fast</td>
+                    <td>Service provider networks</td>
+                </tr>
+                <tr>
+                    <td>BGP</td>
+                    <td>EGP</td>
+                    <td>Path Vector</td>
+                    <td>Slow</td>
+                    <td>Internet/between autonomous systems</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Protocol information data
+        const protocolInfo = {
+            'routing-protocol': {
+                title: 'Routing Protocols',
+                content: `
+                    <p>Routing protocols are sets of rules that determine how routers communicate with each other, disseminate information that enables them to select routes between nodes on a computer network.</p>
+                    <p><strong>Key functions:</strong></p>
+                    <ul>
+                        <li>Discover network destinations</li>
+                        <li>Exchange routing information between routers</li>
+                        <li>Determine optimal paths to destinations</li>
+                        <li>React to and recover from network changes and failures</li>
+                    </ul>
+                    <p>Routing protocols can be classified into two major categories: Interior Gateway Protocols (IGP) and Exterior Gateway Protocols (EGP).</p>
+                `
+            },
+            'igp': {
+                title: 'Interior Gateway Protocols (IGP)',
+                content: `
+                    <p>Interior Gateway Protocols are used for routing within an autonomous system (AS) - a collection of IP networks managed by a single organization.</p>
+                    <p><strong>Characteristics:</strong></p>
+                    <ul>
+                        <li>Used within a single autonomous system or organization</li>
+                        <li>Focus on finding the optimal path based on metrics like hop count, bandwidth, delay</li>
+                        <li>Examples include RIP, EIGRP, OSPF, and IS-IS</li>
+                    </ul>
+                    <p>IGPs can be further classified based on their algorithm type: Distance Vector, Enhanced Distance Vector/Hybrid, or Link State protocols.</p>
+                `
+            },
+            'egp': {
+                title: 'Exterior Gateway Protocols (EGP)',
+                content: `
+                    <p>Exterior Gateway Protocols are used for routing between autonomous systems (AS) - different organizations or service providers.</p>
+                    <p><strong>Characteristics:</strong></p>
+                    <ul>
+                        <li>Used between different autonomous systems</li>
+                        <li>Focus more on policy-based routing than purely optimal paths</li>
+                        <li>Handle massive routing tables</li>
+                        <li>Border Gateway Protocol (BGP) is the de facto standard EGP</li>
+                    </ul>
+                    <p>Border Gateway Protocol (BGP) is the primary protocol that powers routing on the global Internet.</p>
+                `
+            },
+            'distance-vector': {
+                title: 'Distance Vector Protocols',
+                content: `
+                    <p>Distance Vector protocols determine the best path based on distance (usually hop count) and direction (vector).</p>
+                    <p><strong>Characteristics:</strong></p>
+                    <ul>
+                        <li>Routers share their entire routing table with neighbors</li>
+                        <li>Uses Bellman-Ford algorithm</li>
+                        <li>Vulnerable to routing loops</li>
+                        <li>Slower convergence than Link State protocols</li>
+                        <li>Simpler implementation and lower CPU requirements</li>
+                    </ul>
+                    <p>RIP (Routing Information Protocol) is the most common example of a pure distance vector protocol.</p>
+                `
+            },
+            'enhanced-dv': {
+                title: 'Enhanced Distance Vector / Hybrid Protocols',
+                content: `
+                    <p>Enhanced Distance Vector protocols combine aspects of both distance vector and link state protocols to improve performance and reliability.</p>
+                    <p><strong>Characteristics:</strong></p>
+                    <ul>
+                        <li>Uses more sophisticated metrics than simple hop count</li>
+                        <li>Only shares routing information with neighbors when changes occur</li>
+                        <li>Faster convergence than traditional distance vector protocols</li>
+                        <li>More efficient use of bandwidth and processing resources</li>
+                    </ul>
+                    <p>EIGRP (Enhanced Interior Gateway Routing Protocol) by Cisco is the prime example of an enhanced distance vector protocol.</p>
+                `
+            },
+            'link-state': {
+                title: 'Link State Protocols',
+                content: `
+                    <p>Link State protocols build a complete map of the network topology and then calculate the best path through that topology.</p>
+                    <p><strong>Characteristics:</strong></p>
+                    <ul>
+                        <li>Each router builds a complete map of the network</li>
+                        <li>Uses Dijkstra's Shortest Path First (SPF) algorithm</li>
+                        <li>Faster convergence than distance vector protocols</li>
+                        <li>More CPU and memory intensive</li>
+                        <li>Less prone to routing loops</li>
+                    </ul>
+                    <p>OSPF (Open Shortest Path First) and IS-IS (Intermediate System to Intermediate System) are common link state protocols.</p>
+                `
+            },
+            'path-vector': {
+                title: 'Path Vector Protocols',
+                content: `
+                    <p>Path Vector protocols track the path that a route takes through the network and use policies to make routing decisions.</p>
+                    <p><strong>Characteristics:</strong></p>
+                    <ul>
+                        <li>Exchange the entire path information for each route</li>
+                        <li>Use policy-based routing decisions</li>
+                        <li>Designed for routing between autonomous systems</li>
+                        <li>Can prevent routing loops by examining the path</li>
+                        <li>Can make decisions based on multiple attributes beyond just metrics</li>
+                    </ul>
+                    <p>BGP (Border Gateway Protocol) is the primary example of a path vector protocol and is the foundation of Internet routing.</p>
+                `
+            },
+            'rip': {
+                title: 'RIP (Routing Information Protocol)',
+                content: `
+                    <p>RIP is one of the oldest distance vector routing protocols, designed for small networks.</p>
+                    <p><strong>Key features:</strong></p>
+                    <ul>
+                        <li>Uses hop count as its only metric</li>
+                        <li>Maximum hop count of 15 (16 is considered unreachable)</li>
+                        <li>Broadcasts entire routing table every 30 seconds</li>
+                        <li>Slow convergence time</li>
+                        <li>Easy to configure and understand</li>
+                        <li>RIPv2 added CIDR and VLSM support</li>
+                    </ul>
+                    <p><strong>Best used for:</strong> Small, simple networks where ease of configuration is more important than scalability or fast convergence.</p>
+                `
+            },
+            'eigrp': {
+                title: 'EIGRP (Enhanced Interior Gateway Routing Protocol)',
+                content: `
+                    <p>EIGRP is a Cisco-proprietary enhanced distance vector routing protocol.</p>
+                    <p><strong>Key features:</strong></p>
+                    <ul>
+                        <li>Uses composite metric including bandwidth, delay, reliability, and load</li>
+                        <li>Rapid convergence with Diffusing Update Algorithm (DUAL)</li>
+                        <li>Only sends partial updates when changes occur</li>
+                        <li>Support for unequal-cost load balancing</li>
+                        <li>Classless routing with support for VLSM and CIDR</li>
+                        <li>Manual summarization capabilities</li>
+                    </ul>
+                    <p><strong>Best used for:</strong> Medium-sized networks using primarily Cisco equipment, where quick convergence and efficient operation are required.</p>
+                `
+            },
+            'ospf': {
+                title: 'OSPF (Open Shortest Path First)',
+                content: `
+                    <p>OSPF is a widely-used link state routing protocol defined in RFC 2328.</p>
+                    <p><strong>Key features:</strong></p>
+                    <ul>
+                        <li>Uses cost (based on bandwidth) as its metric</li>
+                        <li>Hierarchical design with areas to improve scalability</li>
+                        <li>Fast convergence using Dijkstra's SPF algorithm</li>
+                        <li>Uses Hello packets to establish neighbor relationships</li>
+                        <li>Link-State Advertisements (LSAs) describe network topology</li>
+                        <li>Support for authentication</li>
+                        <li>Open standard that works across vendor equipment</li>
+                    </ul>
+                    <p><strong>Best used for:</strong> Medium to large IP networks where fast convergence and scalability are important, especially in multi-vendor environments.</p>
+                `
+            },
+            'is-is': {
+                title: 'IS-IS (Intermediate System to Intermediate System)',
+                content: `
+                    <p>IS-IS is a link state routing protocol originally developed for the OSI protocol stack, later adapted for IP networks.</p>
+                    <p><strong>Key features:</strong></p>
+                    <ul>
+                        <li>Operates at the network layer of the OSI model</li>
+                        <li>Uses cost-based metrics</li>
+                        <li>Hierarchical design with levels to improve scalability</li>
+                        <li>Fast convergence with Dijkstra's SPF algorithm</li>
+                        <li>Less CPU-intensive than OSPF</li>
+                        <li>Good scalability for large networks</li>
+                        <li>Commonly used by service providers</li>
+                    </ul>
+                    <p><strong>Best used for:</strong> Large service provider networks where scalability and stability are critical, particularly in core networks.</p>
+                `
+            },
+            'bgp': {
+                title: 'BGP (Border Gateway Protocol)',
+                content: `
+                    <p>BGP is the path vector protocol that powers routing on the global Internet.</p>
+                    <p><strong>Key features:</strong></p>
+                    <ul>
+                        <li>Designed for routing between autonomous systems</li>
+                        <li>Uses TCP for reliable communication</li>
+                        <li>Policy-based routing with multiple attributes</li>
+                        <li>Carries the complete AS path to prevent loops</li>
+                        <li>Incremental updates only for changed routes</li>
+                        <li>Extensive filtering and policy options</li>
+                        <li>Can handle massive routing tables (the entire Internet)</li>
+                    </ul>
+                    <p><strong>Best used for:</strong> Connections between different organizations, service providers, or any scenario where policy-based routing decisions are more important than purely technical metrics.</p>
+                `
+            }
+        };
+
+        // Get DOM elements
+        const infoPanel = document.getElementById('info-panel');
+        const infoTitle = document.getElementById('info-title');
+        const infoContent = document.getElementById('info-content');
+        const comparisonBtn = document.getElementById('comparison-btn');
+        const comparisonTable = document.getElementById('comparison-table');
+        
+        // Add click event listeners to all protocol boxes
+        const protocolBoxes = document.querySelectorAll('.protocol-box');
+        protocolBoxes.forEach(box => {
+            box.addEventListener('click', function() {
+                // Reset all boxes and highlight current one
+                protocolBoxes.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show info panel with protocol information
+                const info = protocolInfo[this.id];
+                if (info) {
+                    infoTitle.textContent = info.title;
+                    infoContent.innerHTML = info.content;
+                    infoPanel.classList.add('active');
+                }
+                
+                // Hide comparison table
+                comparisonTable.style.display = 'none';
+            });
+        });
+        
+        // Add click event listener to comparison button
+        comparisonBtn.addEventListener('click', function() {
+            if (comparisonTable.style.display === 'table') {
+                comparisonTable.style.display = 'none';
+                comparisonBtn.textContent = 'Compare All Protocols';
+            } else {
+                comparisonTable.style.display = 'table';
+                comparisonBtn.textContent = 'Hide Comparison';
+                
+                // Reset protocol boxes
+                protocolBoxes.forEach(box => box.classList.remove('active'));
+                
+                // Update info panel
+                infoTitle.textContent = 'Protocol Comparison';
+                infoContent.innerHTML = `<p>The table below compares the key characteristics of the major routing protocols. Click on any protocol in the chart above to see more detailed information.</p>`;
+                infoPanel.classList.add('active');
+            }
+        });
+
+        // Initialize with Routing Protocol selected
+        document.getElementById('routing-protocol').click();
+    </script>
+</body>
+</html>
